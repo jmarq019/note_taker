@@ -7,29 +7,21 @@ router.get('/notes', (req, res) => {
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 });
 
-router.post('/', (req,res) =>{
+router.post('/notes', (req,res) =>{
 
     // Destructuring assignment for the items in req.body
-    const { title, text} = req.body;
+    const { title, text } = req.body;
   
     // If all the required properties are present
     if (req.body) {
-      // Variable for the object we will save
-      const newNote = {
-        title,
-        text,
-      };
+      
+      const newNote = { title, text };
   
       readAndAppend(newNote, './db/db.json');
-  
-      const response = {
-        status: 'success',
-        body: newNote,
-      };
-  
-      res.json(response);
+      res.json(`Note added successfully 🚀`)
+      
     } else {
-      res.json('Error in posting feedback');
+      res.json('Error in saving note');
     }
 
 });
