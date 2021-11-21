@@ -42,11 +42,10 @@ router.delete('/notes/:id', (req, res) =>{
   readFromFile('./db/db.json')
   .then((data) => {
     let dataArray = JSON.parse(data) || []
-    let deletedItem = dataArray[req.params.id]
     const newArray = dataArray.filter(({id})=>id!=req.params.id)
     console.log(newArray)
         writeToFile('./db/db.json', newArray)  
-    res.json(deletedItem)
+    res.json({message:`item successfully deleted!`})
   });
 });
 
