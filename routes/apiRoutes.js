@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { readFromFile, readAndAppend, writeToFile } = require('../helpers/fsUtils');
-
+const { v4: uuidv4 } = require('uuid');
 
 // GET Route for retrieving all the feedback
 router.get('/notes', (req, res) => {  
@@ -26,7 +26,7 @@ router.post('/notes', (req,res) =>{
     // If all the required properties are present
     if (req.body) {
       
-      const newNote = { title, text };
+      const newNote = { title, text, id:uuidv4() };
   
       readAndAppend(newNote, './db/db.json');
       res.json(`Note added successfully 🚀`)
@@ -43,10 +43,9 @@ router.delete('/notes/:id', (req, res) =>{
   .then((data) => {
     let dataArray = JSON.parse(data) || []
     let deletedItem = dataArray[req.params.id]
-    dataArray.splice(req.params.id, 1)
-    console.log(req.params.id)
-    console.log(dataArray)
-        writeToFile('./db/db.json', dataArray)  
+    const newArray = dataArray.filter(({id})=>id!=req.params.id)
+    console.log(newArray)
+        writeToFile('./db/db.json', newArray)  
     res.json(deletedItem)
   });
 });
